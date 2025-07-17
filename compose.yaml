@@ -5,25 +5,25 @@ services:
     entrypoint: "/usr/local/bin/supervisord"
     command: ["-c", "/etc/supervisord.conf"]
     configs:
-      - source: supervisord_conf
+      - source: mysql-supervisord-conf
         target: /etc/supervisord.conf
-      - source: mysql_conf
+      - source: mysql-mysql-conf
         target: /etc/my.cnf
-      - source: mysql_initialize_conf
+      - source: mysql-initialize-conf
         target: /opt/mysql/mysql${MYSQL_VERSION}/conf/initialize.conf
     volumes:
       - mysql-data:/opt/mysql/mysql${MYSQL_VERSION}/data
       - mysql-log:/opt/mysql/mysql${MYSQL_VERSION}/log
       - ./schema:/opt/mysql/mysql${MYSQL_VERSION}/schema
     networks:
-      mysql_subnet:
+      mysql-subnet:
         ipv4_address: ${MYSQL_NODE_01_IP}
 configs:
-  supervisord_conf:
+  mysql-supervisord-conf:
     file: ./config/supervisord.conf
-  mysql_initialize_conf:
+  mysql-initialize-conf:
     file: ./config/initialize.conf
-  mysql_conf:
+  mysql-mysql-conf:
     file: ./config/my.cnf
 volumes:
   mysql-data:
@@ -31,7 +31,7 @@ volumes:
   mysql-log:
     driver: local
 networks:
-  mysql_subnet:
+  mysql-subnet:
     driver: bridge
     ipam:
       driver: default
